@@ -10,8 +10,8 @@ import imageUpload from "../../middlewares/image.middlewear.js";
 
 const blogRouter = express.Router();
 
-blogRouter.post("/", CreateBlog);
-blogRouter.patch("/:id", UpdateBlog);
+blogRouter.post("/", imageUpload, CreateBlog);
+blogRouter.patch("/:id", imageUpload, UpdateBlog);
 blogRouter.delete("/:id", DeleteBlog);
 blogRouter.get("/", GetAllBlogs);
 blogRouter.get("/:id", GetOneBlog);
