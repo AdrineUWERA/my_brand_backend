@@ -1,43 +1,44 @@
 import Blog from "../models/Blog.js";
+import BlogService from "../services/blog.service.js";
 
 const GetAllBlogs = async (req, res) => {
-  const blogs = await Blog.find({});
-  try{
+  const blogs = await BlogService.findAll();
+  try {
     res.send(blogs);
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong!",
       error: `Error: ${err}`,
     });
-  };
-}
+  }
+};
 
 const GetOneBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
-    const blog = await Blog.findById(blogId);
-    if (blog) {
-      res.status(200).json({ blog });
-    } else{
+    const blog = await BlogService.findbyId(blogId);
+
+    if (!blog) {
       return res.status(404).json({ error: "There is no blog with that id" });
     }
-
+    res.status(200).json({ message: "One blog", data: blog });
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong",
       error: `Error: ${err}`,
     });
   }
-}
+};
 
 const CreateBlog = async (req, res) => {
   try {
-    const { title, content, category, cover_image, references } = req.body;
-    const blog = await Blog.create({
+    const { title, content, category, coverImage, references } = req.body;
+
+    const blog = await BlogService.createBlog({
       title: title,
       content: content,
       category: category,
-      cover_image: cover_image,
+      coverImage: coverImage,
       references: references,
     });
 
@@ -47,9 +48,6 @@ const CreateBlog = async (req, res) => {
       message: "New Blog added successfully!",
       data: BlogAdded,
     });
-
-    res.send(BlogAdded);
-
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong",
@@ -60,45 +58,40 @@ const CreateBlog = async (req, res) => {
 
 const UpdateBlog = async (req, res) => {
   try {
+    const { title, content, category, coverImage, references } = req.body;
     const blogId = req.params.id;
     const blog = await Blog.findById(blogId);
+    if (blog) {
+      if (title) blog.title = title;
+      if (content) blog.content = content;
+      if (category) blog.category = category;
+      if (coverImage) blog.coverImage = coverImage;
+      if (references) blog.references = references;
 
-    if (blog) { 
-      await Blog.findByIdAndUpdate(blogId, req.body);
-      const updatedBlog = await Blog.findById(blogId);
+      const updatedBlog = await blog.save();
+
       res.send(updatedBlog);
-    } else{
+    } else {
       return res.status(404).json({ error: "Blog doesn't exist" });
     }
-
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong",
       error: `Error: ${err}`,
     });
   }
-}
+};
 
 const DeleteBlog = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id);
-    //checks if the blog exists
-    if (blog) {
-      //deletes the blog
-      const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
-      res.send(deletedBlog); 
-    } 
-    else{
-      res.status(204).json({ });
-    }
+    const deletedBlog = await BlogService.deleteOne(req.params.id);
+    res.send({ message: "Blog deleted", data: deletedBlog });
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong",
-      error: `Error: ${err}`
+      error: `Error: ${err}`,
     });
   }
-}
+};
 
-export {
-    CreateBlog, UpdateBlog, DeleteBlog, GetAllBlogs, GetOneBlog
-}
+export { CreateBlog, UpdateBlog, DeleteBlog, GetAllBlogs, GetOneBlog };
