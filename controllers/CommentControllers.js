@@ -36,7 +36,7 @@ const CreateComment = async (req, res) => {
     // const blogId = "uwuwi"
     const { comment } = req.body;
     const newcomment = await Comment.create({
-        blogId: blogId,
+        comment: comment,
     });
 
     const commentAdded = await newcomment.save();

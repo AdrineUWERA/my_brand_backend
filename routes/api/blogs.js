@@ -6,6 +6,7 @@ import {
   GetAllBlogs,
   GetOneBlog,
 } from "../../controllers/BlogControllers.js";
+import imageUpload from "../../middlewares/image.middlewear.js";
 
 const blogRouter = express.Router();
 
