@@ -32,10 +32,12 @@ const GetOneComment = async (req, res) => {
 
 const CreateComment = async (req, res) => {
   try {
-    // const userID = "ADU1"
-    // const blogId = "uwuwi"
+    const userID = "63da6a145f4693fa1c7e33c4"
+    const blogId = "63dbb520b62a311eecd65670"
     const { comment } = req.body;
     const newcomment = await Comment.create({
+      userId: userID,
+      blogId: blogId,
         comment: comment,
     });
 
@@ -45,8 +47,7 @@ const CreateComment = async (req, res) => {
       message: "New comment added successfully!",
       data: commentAdded,
     });
-
-    res.send(commentAdded);
+ 
 
   } catch (err) {
     res.status(500).json({
@@ -87,7 +88,7 @@ const DeleteComment = async (req, res) => {
       res.send(deletedcomment); 
     } 
     else{
-      res.status(204).json({ });
+      res.status(201).json({ message: "blog deleted" });
     }
   } catch (err) {
     res.status(500).json({

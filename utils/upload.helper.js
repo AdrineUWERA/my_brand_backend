@@ -1,4 +1,5 @@
 import cloudinary from "../configs/cloudinary.config.js"
+// import fileUpload from "express-fileupload"
 
 const cloudinaryUpload = async (file) => {
     return new Promise(resolve => {

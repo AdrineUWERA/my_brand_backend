@@ -1,17 +1,21 @@
-import cloudinaryUpload from "../utils/upload.helper.js";
+// import cloudinaryUpload from "../utils/upload.helper.js";
+import cloudinary from "../configs/cloudinary.config.js";
+import fileUpload from "express-fileupload"
 
 const imageUpload = async (req, res, next) => {
-    console.log(req);
-    if (req.files.length !== 0) {
-        const files = req.files;
-        const { path } = files[0];
-        const fileUploaded = await cloudinaryUpload(path);
-        const url = fileUploaded.url;
-
-        req.body.coverImage = url;
-        return next();
-    }
-  return next();
+  try {
+    console.log(req.files)
+    const tmp = req.files.coverImage;
+    const result = await cloudinary.uploader.upload(
+      tmp,
+      { folder: "my-brand" },
+      (_, result) => result
+    );
+    req.body.coverImage = result.url;
+    return next();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default imageUpload;
