@@ -10,9 +10,9 @@ import {
 const commentRouter = express.Router();
 
 commentRouter.post("/",  CreateComment);
-commentRouter.patch("/:id", UpdateComment);
-commentRouter.delete("/:id", DeleteComment);
+// commentRouter.patch("/:id", UpdateComment);
+// commentRouter.delete("/:id", DeleteComment);
 commentRouter.get("/", GetAllComments);
-commentRouter.get("/:id", GetOneComment);
+// commentRouter.get("/:id", GetOneComment);
 
 export default commentRouter;

@@ -5,7 +5,7 @@ import imageUpload from "../middlewares/image.middlewear.js"
 const GetAllBlogs = async (req, res) => {
   const blogs = await BlogService.findAll();
   try {
-    res.send(blogs);
+    res.status(200).json({ message: "All blogs", data: blogs });
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong!",

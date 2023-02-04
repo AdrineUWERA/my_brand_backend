@@ -8,7 +8,7 @@ const GetAllComments = async (req, res) => {
   // const comments = await Comment.find({});
 
   try{
-    res.send(blog.comments);
+    res.status(200).json({ blogId: blog.id, comments: blog.comments }); 
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong!",
