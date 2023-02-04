@@ -51,12 +51,13 @@ const getAllusers = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const user = await User.findOneAndDelete(req.params.id);
-  res.send({user: user, message: "user deleted"});
+  res.send({ message: "user deleted", user: user});
 }
 
 const updateUser = async (req, res) => {
   const user = await User.findOneAndUpdate(req.params.id, req.body);
-  res.send({ user: user, message: "user updated" });
+  const updated = await User.findById(req.params.id)
+  res.send({ user: updated, message: "user updated" });
 };
 
 const UserLogin = async (req, res) => {

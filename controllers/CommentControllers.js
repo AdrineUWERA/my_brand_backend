@@ -1,9 +1,14 @@
 import Comment from "../models/Comment.js";
+import BlogService from "../services/blog.service.js"; 
 
 const GetAllComments = async (req, res) => {
-  const comments = await Comment.find({});
+  const blogId  = req.baseUrl.split("/")[2];
+  const blog = await BlogService.findbyId(blogId);
+
+  // const comments = await Comment.find({});
+
   try{
-    res.send(comments);
+    res.send(blog.comments);
   } catch (err) {
     res.status(500).json({
       message: "Something went wrong!",
@@ -14,6 +19,8 @@ const GetAllComments = async (req, res) => {
 
 const GetOneComment = async (req, res) => {
   try {
+    const blogId  = req.baseUrl.split("/")[2];
+    const blog = await BlogService.findbyId(blogId);
     const commentId = req.params.id;
     const comment = await Comment.findById(commentId);
     if (comment) {
@@ -32,20 +39,21 @@ const GetOneComment = async (req, res) => {
 
 const CreateComment = async (req, res) => {
   try {
-    const userID = "63da6a145f4693fa1c7e33c4"
-    const blogId = "63dbb520b62a311eecd65670"
+    const userID = "63da6a145f4693fa1c7e33c4" 
+    const blogId  = req.baseUrl.split("/")[2];
+    const blog = await BlogService.findbyId(blogId);
     const { comment } = req.body;
     const newcomment = await Comment.create({
       userId: userID,
-      blogId: blogId,
-        comment: comment,
+      blogId: blog.id,
+      comment: comment,
     });
-
-    const commentAdded = await newcomment.save();
+    blog.comments.push(newcomment);
+    await blog.save();
 
     res.status(201).json({
       message: "New comment added successfully!",
-      data: commentAdded,
+      data: blog.comments,
     });
  
 

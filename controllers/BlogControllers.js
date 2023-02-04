@@ -1,5 +1,6 @@
 import Blog from "../models/Blog.js";
 import BlogService from "../services/blog.service.js";
+import imageUpload from "../middlewares/image.middlewear.js"
 
 const GetAllBlogs = async (req, res) => {
   const blogs = await BlogService.findAll();
@@ -32,13 +33,14 @@ const GetOneBlog = async (req, res) => {
 
 const CreateBlog = async (req, res) => {
   try {
-    const { title, content, category, coverImage, references } = req.body;
+    const { title, content, category, coverImage, references } = req.body; 
+    const imageURL = await imageUpload(req.file.path);
 
     const blog = await BlogService.createBlog({
       title: title,
       content: content,
       category: category,
-      coverImage: coverImage,
+      coverImage: imageURL,
       references: references,
     });
 

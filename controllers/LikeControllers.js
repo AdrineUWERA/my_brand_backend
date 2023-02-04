@@ -12,23 +12,6 @@ const GetAllLikes = async (req, res) => {
   };
 }
 
-const GetOnelike = async (req, res) => {
-  try {
-    const likeId = req.params.id;
-    const like = await Like.findById(likeId);
-    if (like) {
-      res.status(200).json({ like });
-    } else{
-      return res.status(404).json({ error: "There is no like with that id" });
-    }
-
-  } catch (err) {
-    res.status(500).json({
-      message: "Something went wrong",
-      error: `Error: ${err}`,
-    });
-  }
-}
 
 const Createlike = async (req, res) => {
   try {
@@ -56,27 +39,6 @@ const Createlike = async (req, res) => {
   }
 };
 
-const Updatelike = async (req, res) => {
-  try {
-    const likeId = req.params.id;
-    const like = await Like.findById(likeId);
-
-    if (like) { 
-      await Like.findByIdAndUpdate(likeId, req.body);
-      const updatedlike = await Like.findById(likeId);
-      res.send(updatedlike);
-    } else{
-      return res.status(404).json({ error: "like doesn't exist" });
-    }
-
-  } catch (err) {
-    res.status(500).json({
-      message: "Something went wrong",
-      error: `Error: ${err}`,
-    });
-  }
-}
-
 const Deletelike = async (req, res) => {
   try {
     const like = await Like.findById(req.params.id);
@@ -98,5 +60,5 @@ const Deletelike = async (req, res) => {
 }
 
 export {
-    Createlike, Updatelike, Deletelike, GetAllLikes, GetOnelike
+    Createlike, Deletelike, GetAllLikes
 }
