@@ -16,7 +16,7 @@ const LikeService = async (blogId, userId) => {
     likeAdded.save()
     likedBlog.likes.push(userId);
     likedBlog.save();  
-    return likedBlog;
+    return await Blog.findById(blogId);;
   }
 };
 

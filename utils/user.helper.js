@@ -22,5 +22,5 @@ function decodeToken(token) {
     const verify = jwt.verify(token, process.env.TOKEN_SECRET);
     return verify;
 }
-
+ 
 export { hashPassword, comparePassword, generateToken, decodeToken }
