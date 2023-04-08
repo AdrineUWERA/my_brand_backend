@@ -1,13 +1,15 @@
 // import cloudinaryUpload from "../utils/upload.helper.js";
-import cloudinary from "../configs/cloudinary.config.js"; 
+import cloudinary from "../configs/cloudinary.config.js";
 
-const imageUpload = async (path) => {
-  try {  
-    const result = await cloudinary.uploader.upload( path,
-      { folder: "my_brand" } 
-    );  
-    return result.url;
-    
+const imageUpload = async (req, res, next) => {
+  try {
+    // console.log("in upload")
+    if (req.file) {
+      const result = await cloudinary.v2.uploader.upload(req.file.path);
+      // console.log("before returning the url", result.url)
+      req.body.coverImage = result.url;
+    }
+    next();
   } catch (error) {
     console.log(error);
   }

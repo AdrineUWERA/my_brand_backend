@@ -6,7 +6,7 @@ const GetAllLikes = async (req, res) => {
     const blogId = req.baseUrl.split("/")[2];
     const likes = await Like.find({ blogId: blogId });
     res.status(200).json({
-      message: "successful",
+      message: "All likes",
       data: likes,
     });
   } catch (err) {
@@ -17,14 +17,29 @@ const GetAllLikes = async (req, res) => {
   }
 };
 
-const LikeAndUnlike = async (req, res) => {
-  try {
-    const userID = "63da6a145f4693fa1c7e33c4";
+const getOneLike = async (req, res) =>{
+  try{
     const blogId = req.baseUrl.split("/")[2];
-    const blogliked = await LikeService(blogId, userID);
+    const userId = req.body.userId; 
+    const like = await Like.find({ userId: userId, blogId: blogId });
+    return res.status(200).json({
+      message: "One like",
+      data: like
+    })
+  } catch (err) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: `Error: ${err}`,
+    });
+  }
+}
 
-    res.status(201).json({
-      message: "blog liked!",
+const LikeAndUnlike = async (req, res) => {
+  try { 
+    const blogliked = await LikeService(req.body.blogId, req.body.userId);
+
+    return res.status(201).json({
+      message: "liked/unliked",
       data: blogliked,
     });
   } catch (err) {
@@ -55,4 +70,4 @@ const LikeAndUnlike = async (req, res) => {
 //   }
 // }
 
-export { LikeAndUnlike, GetAllLikes };
+export { LikeAndUnlike, GetAllLikes, getOneLike };
